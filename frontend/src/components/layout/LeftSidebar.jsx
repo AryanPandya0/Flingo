@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Home, Compass, MessageSquare, Bell, Bookmark, User, Settings, LogOut } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { icon: Home, label: 'Home', id: 'home' },
-  { icon: Compass, label: 'Explore', id: 'explore' },
-  { icon: MessageSquare, label: 'Messages', id: 'messages' },
-  { icon: Bell, label: 'Notifications', id: 'notifications' },
-  { icon: Bookmark, label: 'Bookmarks', id: 'bookmarks' },
-  { icon: User, label: 'Profile', id: 'profile' },
-  { icon: Settings, label: 'Settings', id: 'settings' },
+  { icon: Home, label: 'Home', path: '/' },
+  { icon: Compass, label: 'Explore', path: '/explore' },
+  { icon: MessageSquare, label: 'Messages', path: '/messages' },
+  { icon: Bell, label: 'Notifications', path: '/notifications' },
+  { icon: Bookmark, label: 'Bookmarks', path: '/bookmarks' },
+  { icon: User, label: 'Profile', path: '/profile' },
+  { icon: Settings, label: 'Settings', path: '/settings' },
 ];
 
 const LeftSidebar = () => {
-  const [active, setActive] = useState('home');
+  const location = useLocation();
 
   return (
     <aside className="h-full flex flex-col px-4 xl:px-6 py-6 xl:py-8 overflow-y-auto hide-scrollbar w-full border-r border-border-light dark:border-border-dark md:border-none">
@@ -31,12 +32,12 @@ const LeftSidebar = () => {
       <nav className="flex-1 space-y-2" aria-label="Main Navigation">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
-          const isActive = active === item.id;
-
+          const isActive = location.pathname === item.path;
+          
           return (
-            <button
-              key={item.id}
-              onClick={() => setActive(item.id)}
+            <Link
+              key={item.path}
+              to={item.path}
               aria-label={item.label}
               aria-current={isActive ? 'page' : undefined}
               className="relative w-full flex items-center xl:justify-start justify-center gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full group outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
@@ -52,7 +53,7 @@ const LeftSidebar = () => {
               {isActive && (
                 <div className="absolute inset-0 rounded-full bg-primary/10 xl:hidden" />
               )}
-
+              
               <div className={cn(
                 "relative z-10 flex items-center justify-center xl:justify-start gap-4 w-full transition-colors duration-200",
                 isActive ? "text-primary xl:text-white" : "text-text-primary-light dark:text-text-primary-dark group-hover:text-primary"
@@ -69,13 +70,13 @@ const LeftSidebar = () => {
                   {item.label}
                 </span>
               </div>
-            </button>
+            </Link>
           );
         })}
       </nav>
 
       {/* Logout Button */}
-      <button
+      <button 
         aria-label="Logout"
         className="flex items-center justify-center xl:justify-start gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full text-text-secondary-light dark:text-text-secondary-dark hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group mt-auto w-full outline-none focus-visible:ring-2 focus-visible:ring-red-500"
       >
