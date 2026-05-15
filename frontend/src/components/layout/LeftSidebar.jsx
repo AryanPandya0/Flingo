@@ -1,0 +1,89 @@
+import React, { useState } from 'react';
+import { Home, Compass, MessageSquare, Bell, Bookmark, User, Settings, LogOut } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { motion } from 'framer-motion';
+
+const NAV_ITEMS = [
+  { icon: Home, label: 'Home', id: 'home' },
+  { icon: Compass, label: 'Explore', id: 'explore' },
+  { icon: MessageSquare, label: 'Messages', id: 'messages' },
+  { icon: Bell, label: 'Notifications', id: 'notifications' },
+  { icon: Bookmark, label: 'Bookmarks', id: 'bookmarks' },
+  { icon: User, label: 'Profile', id: 'profile' },
+  { icon: Settings, label: 'Settings', id: 'settings' },
+];
+
+const LeftSidebar = () => {
+  const [active, setActive] = useState('home');
+
+  return (
+    <aside className="h-full flex flex-col px-4 xl:px-6 py-6 xl:py-8 overflow-y-auto hide-scrollbar w-full border-r border-border-light dark:border-border-dark md:border-none">
+      {/* Profile Card */}
+      <div className="flex items-center gap-4 mb-8 xl:mb-10 p-2 xl:p-3 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <div className="w-10 h-10 xl:w-12 xl:h-12 rounded-full bg-gray-200 dark:bg-gray-800 shrink-0 overflow-hidden flex items-center justify-center"></div>
+        <div className="hidden xl:block">
+          <h2 className="font-semibold text-[15px] leading-tight">Aryan Pandya</h2>
+          <p className="text-text-secondary-light dark:text-text-secondary-dark text-[13px]">@aryan_pandya</p>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-2" aria-label="Main Navigation">
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const isActive = active === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActive(item.id)}
+              aria-label={item.label}
+              aria-current={isActive ? 'page' : undefined}
+              className="relative w-full flex items-center xl:justify-start justify-center gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full group outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeNavIndicator"
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-secondary hidden xl:block"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              {isActive && (
+                <div className="absolute inset-0 rounded-full bg-primary/10 xl:hidden" />
+              )}
+
+              <div className={cn(
+                "relative z-10 flex items-center justify-center xl:justify-start gap-4 w-full transition-colors duration-200",
+                isActive ? "text-primary xl:text-white" : "text-text-primary-light dark:text-text-primary-dark group-hover:text-primary"
+              )}>
+                <Icon size={24} className={cn(
+                  "transition-transform duration-200 xl:w-[22px] xl:h-[22px]",
+                  !isActive && "group-hover:scale-110",
+                  isActive && "fill-current xl:fill-none"
+                )} />
+                <span className={cn(
+                  "text-[16px] hidden xl:block",
+                  isActive ? "font-semibold" : "font-medium"
+                )}>
+                  {item.label}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Logout Button */}
+      <button
+        aria-label="Logout"
+        className="flex items-center justify-center xl:justify-start gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full text-text-secondary-light dark:text-text-secondary-dark hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group mt-auto w-full outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+      >
+        <LogOut size={24} className="group-hover:-translate-x-1 transition-transform xl:w-[22px] xl:h-[22px]" />
+        <span className="font-medium text-[16px] hidden xl:block">Logout</span>
+      </button>
+    </aside>
+  );
+};
+
+export default LeftSidebar;
