@@ -16,9 +16,9 @@ export default {
           light: '#FFFFFF',
           dark: '#111827',
         },
-        primary: '#6366F1',
-        secondary: '#8B5CF6',
-        cyan: '#06B6D4',
+        primary: '#F43F5E', // Rose 500
+        secondary: '#EC4899', // Pink 500
+        cyan: '#F97316', // Orange 500
         text: {
           primary: {
             light: '#111827',

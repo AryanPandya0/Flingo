@@ -1,8 +1,9 @@
 import React from 'react';
-import { Home, Compass, MessageSquare, Bell, Bookmark, User, Settings, LogOut } from 'lucide-react';
+import { Home, Compass, MessageSquare, Bell, Bookmark, User, Settings, LogOut, Sun, Moon } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', path: '/' },
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 
 const LeftSidebar = () => {
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <aside className="h-full flex flex-col px-4 xl:px-6 py-6 xl:py-8 overflow-y-auto hide-scrollbar w-full border-r border-border-light dark:border-border-dark md:border-none">
@@ -74,6 +76,29 @@ const LeftSidebar = () => {
           );
         })}
       </nav>
+
+      {/* Theme Toggle */}
+      <button 
+        aria-label="Toggle Theme"
+        onClick={toggleTheme}
+        className="flex items-center justify-center xl:justify-start gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full text-text-secondary-light dark:text-text-secondary-dark hover:bg-black/5 dark:hover:bg-white/5 transition-all group mt-6 xl:mt-8 w-full outline-none focus-visible:ring-2 focus-visible:ring-primary mb-2"
+      >
+        <motion.div
+          initial={false}
+          animate={{ rotate: theme === 'dark' ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative w-6 h-6 xl:w-[22px] xl:h-[22px] flex items-center justify-center"
+        >
+          {theme === 'dark' ? (
+            <Moon className="absolute w-full h-full text-text-primary-dark" />
+          ) : (
+            <Sun className="absolute w-full h-full text-orange-500" />
+          )}
+        </motion.div>
+        <span className="font-medium text-[16px] hidden xl:block">
+          {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+        </span>
+      </button>
 
       {/* Logout Button */}
       <button 
