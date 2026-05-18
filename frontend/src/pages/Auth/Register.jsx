@@ -23,7 +23,7 @@ const Register = () => {
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
     if (!formData.password) newErrors.password = 'Password is required';
     else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,23 +43,23 @@ const Register = () => {
 
   return (
     <div className="min-h-screen w-full flex bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark">
-      
+
       {/* Left Side - Visual / Branding */}
       <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-rose-400 via-pink-500 to-orange-400 relative items-center justify-center overflow-hidden p-12">
         <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
-        
+
         {/* Decorative Circles */}
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-white/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -left-20 w-[400px] h-[400px] bg-pink-700/20 rounded-full blur-[100px]" />
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="relative z-10 max-w-lg text-white"
         >
           <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-8 border border-white/30 shadow-glass">
-             <Feather className="w-8 h-8 text-white drop-shadow-sm" />
+            <Feather className="w-8 h-8 text-white drop-shadow-sm" />
           </div>
           <h1 className="text-4xl xl:text-5xl font-bold leading-tight mb-6">
             Join the flock today.
@@ -67,7 +67,7 @@ const Register = () => {
           <p className="text-lg xl:text-xl text-white/90 leading-relaxed mb-8">
             Start connecting with amazing people and share your unique vibrant perspective with the world.
           </p>
-          
+
           <div className="flex -space-x-4">
             <div className="w-10 h-10 rounded-full border-2 border-pink-500 bg-gray-300 relative z-30" />
             <div className="w-10 h-10 rounded-full border-2 border-pink-500 bg-gray-400 relative z-20" />
@@ -81,11 +81,11 @@ const Register = () => {
 
       {/* Right Side - Auth Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
-        
+
         {/* Mobile decorative background */}
         <div className="absolute inset-0 bg-gradient-to-br from-rose-400/5 via-pink-500/5 to-orange-400/5 lg:hidden" />
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -102,10 +102,10 @@ const Register = () => {
           <div className="flex gap-4 mb-8">
             <button className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
-                <path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36 16.6053 6.54998L20.0303 3.125C17.9502 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21525 6.86 8.87028 4.75 12.0003 4.75Z" fill="#EA4335"/>
-                <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4"/>
-                <path d="M5.26498 14.2949C5.02498 13.5699 4.88501 12.7999 4.88501 11.9999C4.88501 11.1999 5.01998 10.4299 5.26498 9.7049L1.275 6.60986C0.46 8.22986 0 10.0599 0 11.9999C0 13.9399 0.46 15.7699 1.28 17.3899L5.26498 14.2949Z" fill="#FBBC05"/>
-                <path d="M12.0004 24.0001C15.2404 24.0001 17.9654 22.935 19.9454 21.095L16.0804 18.095C15.0054 18.82 13.6204 19.245 12.0004 19.245C8.8704 19.245 6.21537 17.135 5.26538 14.29L1.27539 17.385C3.25539 21.31 7.3104 24.0001 12.0004 24.0001Z" fill="#34A853"/>
+                <path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36 16.6053 6.54998L20.0303 3.125C17.9502 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21525 6.86 8.87028 4.75 12.0003 4.75Z" fill="#EA4335" />
+                <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4" />
+                <path d="M5.26498 14.2949C5.02498 13.5699 4.88501 12.7999 4.88501 11.9999C4.88501 11.1999 5.01998 10.4299 5.26498 9.7049L1.275 6.60986C0.46 8.22986 0 10.0599 0 11.9999C0 13.9399 0.46 15.7699 1.28 17.3899L5.26498 14.2949Z" fill="#FBBC05" />
+                <path d="M12.0004 24.0001C15.2404 24.0001 17.9654 22.935 19.9454 21.095L16.0804 18.095C15.0054 18.82 13.6204 19.245 12.0004 19.245C8.8704 19.245 6.21537 17.135 5.26538 14.29L1.27539 17.385C3.25539 21.31 7.3104 24.0001 12.0004 24.0001Z" fill="#34A853" />
               </svg>
               Google
             </button>
@@ -125,7 +125,7 @@ const Register = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             <div>
               <label className="block text-[13px] font-medium mb-1.5 text-text-secondary-light dark:text-text-secondary-dark">Full Name</label>
               <div className="relative">
@@ -137,7 +137,7 @@ const Register = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="John Doe"
+                  placeholder="Aryan Pandya"
                   className={cn(
                     "w-full bg-white dark:bg-[#1A2235] text-text-primary-light dark:text-text-primary-dark rounded-xl py-3 pl-11 pr-4 outline-none border focus:border-primary transition-colors text-[15px] shadow-sm",
                     errors.name ? "border-red-500 focus:border-red-500" : "border-border-light dark:border-border-dark"
@@ -189,7 +189,7 @@ const Register = () => {
               {errors.password && <p className="text-red-500 text-[12px] mt-1.5 ml-1">{errors.password}</p>}
             </div>
 
-            <button 
+            <button
               type="submit"
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-2 py-3.5 mt-4 rounded-xl text-white font-medium text-[15px] bg-gradient-to-r from-rose-400 to-pink-500 hover:opacity-90 transition-opacity shadow-md disabled:opacity-70 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background-light dark:focus-visible:ring-offset-background-dark"
