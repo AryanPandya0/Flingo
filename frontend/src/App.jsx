@@ -3,6 +3,9 @@ import AppLayout from './components/layout/AppLayout';
 import Home from './pages/Home/Home';
 import Explore from './pages/Explore/Explore';
 import Profile from './pages/Profile/Profile';
+import Messages from './pages/Messages/Messages';
+import Notifications from './pages/Notifications/Notifications';
+import Bookmarks from './pages/Bookmarks/Bookmarks';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 
@@ -19,6 +22,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
         </Route>
       </Routes>
     </Router>
