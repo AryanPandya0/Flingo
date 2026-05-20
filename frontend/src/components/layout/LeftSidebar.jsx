@@ -10,7 +10,6 @@ const NAV_ITEMS = [
   { icon: Compass, label: 'Explore', path: '/explore' },
   { icon: MessageSquare, label: 'Messages', path: '/messages' },
   { icon: Bell, label: 'Notifications', path: '/notifications' },
-  { icon: Bookmark, label: 'Bookmarks', path: '/bookmarks' },
   { icon: User, label: 'Profile', path: '/profile' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];

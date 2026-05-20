@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { cn } from '../../utils/cn';
 import { motion } from 'framer-motion';
-import { Settings, MapPin, Link as LinkIcon, Calendar, User } from 'lucide-react';
+import { Settings, MapPin, Link as LinkIcon, Calendar, User, Bookmark } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const PROFILE_TABS = ['Posts', 'Replies', 'Media', 'Likes'];
 
@@ -24,9 +25,12 @@ const Profile = ({ posts = [] }) => {
 
           {/* Action Buttons */}
           <div className="flex gap-2 md:gap-3 mt-2">
-            <button aria-label="Settings" className="p-2 rounded-full border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <Link to="/bookmarks" aria-label="Bookmarks" className="p-2 rounded-full border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center">
+              <Bookmark size={20} />
+            </Link>
+            <Link to="/settings" aria-label="Settings" className="p-2 rounded-full border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center">
               <Settings size={20} />
-            </button>
+            </Link>
             <button className="px-4 py-1.5 md:px-5 md:py-2 rounded-full text-[13px] md:text-[14px] font-semibold border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               Edit Profile
             </button>

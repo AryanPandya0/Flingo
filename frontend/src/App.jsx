@@ -6,6 +6,7 @@ import Profile from './pages/Profile/Profile';
 import Messages from './pages/Messages/Messages';
 import Notifications from './pages/Notifications/Notifications';
 import Bookmarks from './pages/Bookmarks/Bookmarks';
+import Settings from './pages/Settings/Settings';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/messages" element={<Messages />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>
