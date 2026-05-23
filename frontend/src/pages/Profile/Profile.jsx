@@ -3,11 +3,18 @@ import { cn } from '../../utils/cn';
 import { motion } from 'framer-motion';
 import { Settings, MapPin, Link as LinkIcon, Calendar, User, Bookmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import EditProfileModal from './EditProfileModal';
 
 const PROFILE_TABS = ['Posts', 'Replies', 'Media', 'Likes'];
 
 const Profile = ({ posts = [] }) => {
   const [activeTab, setActiveTab] = useState('Posts');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleSaveProfile = (updatedData) => {
+    // Here you would typically make an API call to save the data
+    console.log('Saving profile data:', updatedData);
+  };
 
   return (
     <main className="flex-1 w-full max-w-full md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-full overflow-y-auto hide-scrollbar md:border-r border-border-light dark:border-border-dark relative z-0">
@@ -31,7 +38,10 @@ const Profile = ({ posts = [] }) => {
             <Link to="/settings" aria-label="Settings" className="p-2 rounded-full border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center">
               <Settings size={20} />
             </Link>
-            <button className="px-4 py-1.5 md:px-5 md:py-2 rounded-full text-[13px] md:text-[14px] font-semibold border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <button 
+              onClick={() => setIsEditModalOpen(true)}
+              className="px-4 py-1.5 md:px-5 md:py-2 rounded-full text-[13px] md:text-[14px] font-semibold border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
               Edit Profile
             </button>
           </div>
@@ -120,6 +130,12 @@ const Profile = ({ posts = [] }) => {
         </div>
 
       </div>
+      {/* Modals */}
+      <EditProfileModal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        onSave={handleSaveProfile}
+      />
     </main>
   );
 };
