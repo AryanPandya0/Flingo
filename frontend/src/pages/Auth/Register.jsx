@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Feather } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, User, ArrowRight, Feather, AtSign } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     // Clear error when user types
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    if (serverError) setServerError('');
   };
 
   const validate = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Full name is required';
+    if (!formData.username) newErrors.username = 'Username is required';
     if (!formData.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
     if (!formData.password) newErrors.password = 'Password is required';
@@ -28,16 +32,34 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
+      setServerError('');
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Something went wrong during registration');
+        }
+
+        // Success - user is registered and cookie is set
+        navigate('/'); // Redirect to Home Feed
+      } catch (err) {
+        setServerError(err.message);
+      } finally {
         setIsLoading(false);
-        console.log('Register attempt with:', formData);
-        // TODO: Connect to backend
-      }, 1500);
+      }
     }
   };
 
@@ -148,6 +170,27 @@ const Register = () => {
             </div>
 
             <div>
+              <label className="block text-[13px] font-medium mb-1.5 text-text-secondary-light dark:text-text-secondary-dark">Username</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-text-secondary-light dark:text-text-secondary-dark">
+                  <AtSign size={18} />
+                </div>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="aryan_pandya"
+                  className={cn(
+                    "w-full bg-white dark:bg-[#1A2235] text-text-primary-light dark:text-text-primary-dark rounded-xl py-3 pl-11 pr-4 outline-none border focus:border-primary transition-colors text-[15px] shadow-sm",
+                    errors.username ? "border-red-500 focus:border-red-500" : "border-border-light dark:border-border-dark"
+                  )}
+                />
+              </div>
+              {errors.username && <p className="text-red-500 text-[12px] mt-1.5 ml-1">{errors.username}</p>}
+            </div>
+
+            <div>
               <label className="block text-[13px] font-medium mb-1.5 text-text-secondary-light dark:text-text-secondary-dark">Email Address</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-text-secondary-light dark:text-text-secondary-dark">
@@ -188,6 +231,12 @@ const Register = () => {
               </div>
               {errors.password && <p className="text-red-500 text-[12px] mt-1.5 ml-1">{errors.password}</p>}
             </div>
+
+            {serverError && (
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-[13px] font-medium text-center">
+                {serverError}
+              </div>
+            )}
 
             <button
               type="submit"

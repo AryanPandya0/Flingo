@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Feather } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -8,12 +8,15 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     // Clear error when user types
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    if (serverError) setServerError('');
   };
 
   const validate = () => {
@@ -25,16 +28,34 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
+      setServerError('');
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Invalid email or password');
+        }
+
+        // Success - user is logged in
+        navigate('/'); // Redirect to Home Feed
+      } catch (err) {
+        setServerError(err.message);
+      } finally {
         setIsLoading(false);
-        console.log('Login attempt with:', formData);
-        // TODO: Connect to backend
-      }, 1500);
+      }
     }
   };
 
@@ -157,6 +178,12 @@ const Login = () => {
               </div>
               {errors.password && <p className="text-red-500 text-[12px] mt-1.5 ml-1">{errors.password}</p>}
             </div>
+
+            {serverError && (
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-[13px] font-medium text-center">
+                {serverError}
+              </div>
+            )}
 
             <button
               type="submit"
