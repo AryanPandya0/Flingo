@@ -80,3 +80,20 @@ export const logoutUser = (req, res) => {
   });
   res.status(200).json({ message: 'Logged out successfully' });
 };
+
+// @desc    Get current logged in user
+// @route   GET /api/auth/me
+// @access  Private
+export const getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    next(error);
+  }
+};

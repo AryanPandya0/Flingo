@@ -1,38 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react';
-
-const SavedPostSkeleton = ({ delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    className="glass-card p-4 sm:p-5 flex flex-col gap-4"
-  >
-    <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 animate-pulse" />
-      <div className="flex-1 space-y-2">
-        <div className="w-24 h-3 rounded-full bg-black/5 dark:bg-white/5 animate-pulse" />
-        <div className="w-16 h-2 rounded-full bg-black/5 dark:bg-white/5 animate-pulse" />
-      </div>
-      <Bookmark className="w-5 h-5 text-rose-500 fill-current" />
-    </div>
-    
-    <div className="w-full aspect-[4/3] rounded-xl bg-black/5 dark:bg-white/5 animate-pulse" />
-    
-    <div className="flex items-center justify-between mt-2">
-      <div className="flex items-center gap-4 text-text-secondary-light dark:text-text-secondary-dark opacity-50">
-        <Heart className="w-5 h-5" />
-        <MessageCircle className="w-5 h-5" />
-        <Share2 className="w-5 h-5" />
-      </div>
-    </div>
-  </motion.div>
-);
+import { Bookmark } from 'lucide-react';
+import PostCard from '../../components/home/PostCard';
+import { useAuthStore } from '../../store/authStore';
 
 const Bookmarks = () => {
-  // Simulating loading state for now
-  const hasBookmarks = true;
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user, setUser } = useAuthStore();
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        const res = await fetch('/api/posts/bookmarks', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          setPosts(data);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBookmarks();
+  }, []);
+
+  const handleLike = async (postId) => {
+    try {
+      const res = await fetch(`/api/posts/like/${postId}`, { method: 'POST', credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setPosts(posts.map(p => p._id === postId ? { ...p, likes: data.likes } : p));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleBookmark = async (postId) => {
+    try {
+      const res = await fetch(`/api/users/bookmark/${postId}`, { method: 'POST', credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setUser({ ...user, bookmarks: data.bookmarks });
+        // Optionally remove from list immediately, but lets keep it until refresh or let user toggle it back
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleComment = async (postId, text) => {
+    try {
+      const res = await fetch(`/api/posts/comment/${postId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPosts(posts.map(p => p._id === postId ? { ...p, comments: data } : p));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-6 sm:py-8 pb-24 lg:pb-8 h-full overflow-y-auto hide-scrollbar">
@@ -48,7 +82,9 @@ const Bookmarks = () => {
         </div>
       </div>
 
-      {!hasBookmarks ? (
+      {isLoading ? (
+        <div className="text-center p-8">Loading bookmarks...</div>
+      ) : posts.length === 0 ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -64,8 +100,14 @@ const Bookmarks = () => {
         </motion.div>
       ) : (
         <div className="flex flex-col gap-6">
-          {[1, 2, 3].map((item, index) => (
-            <SavedPostSkeleton key={item} delay={index * 0.1} />
+          {posts.map((post) => (
+            <PostCard 
+              key={post._id} 
+              post={post} 
+              onLike={handleLike} 
+              onBookmark={handleBookmark} 
+              onComment={handleComment} 
+            />
           ))}
         </div>
       )}

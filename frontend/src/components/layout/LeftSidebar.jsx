@@ -4,6 +4,7 @@ import { cn } from '../../utils/cn';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuthStore } from '../../store/authStore';
 
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', path: '/' },
@@ -17,15 +18,18 @@ const NAV_ITEMS = [
 const LeftSidebar = () => {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuthStore();
 
   return (
     <aside className="h-full flex flex-col px-4 xl:px-6 py-6 xl:py-8 overflow-y-auto hide-scrollbar w-full border-r border-border-light dark:border-border-dark md:border-none">
       {/* Profile Card */}
       <div className="flex items-center gap-4 mb-8 xl:mb-10 p-2 xl:p-3 rounded-2xl hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-        <div className="w-10 h-10 xl:w-12 xl:h-12 rounded-full bg-gray-200 dark:bg-gray-800 shrink-0 overflow-hidden flex items-center justify-center"></div>
+        <div className="w-10 h-10 xl:w-12 xl:h-12 rounded-full bg-gray-200 dark:bg-gray-800 shrink-0 overflow-hidden flex items-center justify-center">
+          {user?.profilePic && <img src={user.profilePic} alt="avatar" className="w-full h-full object-cover" />}
+        </div>
         <div className="hidden xl:block">
-          <h2 className="font-semibold text-[15px] leading-tight">Aryan Pandya</h2>
-          <p className="text-text-secondary-light dark:text-text-secondary-dark text-[13px]">@aryan_pandya</p>
+          <h2 className="font-semibold text-[15px] leading-tight truncate w-32">{user?.name}</h2>
+          <p className="text-text-secondary-light dark:text-text-secondary-dark text-[13px] truncate w-32">@{user?.username}</p>
         </div>
       </div>
 
@@ -102,6 +106,7 @@ const LeftSidebar = () => {
       {/* Logout Button */}
       <button 
         aria-label="Logout"
+        onClick={() => logout()}
         className="flex items-center justify-center xl:justify-start gap-4 px-3 xl:px-4 py-3 xl:py-3.5 rounded-full text-text-secondary-light dark:text-text-secondary-dark hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all group mt-auto w-full outline-none focus-visible:ring-2 focus-visible:ring-red-500"
       >
         <LogOut size={24} className="group-hover:-translate-x-1 transition-transform xl:w-[22px] xl:h-[22px]" />

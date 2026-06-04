@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Feather, AtSign } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { useAuthStore } from '../../store/authStore';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '' });
@@ -10,6 +11,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
+  const setUser = useAuthStore(state => state.setUser);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,11 +41,12 @@ const Register = () => {
       setServerError('');
       
       try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify(formData),
         });
 
@@ -54,6 +57,7 @@ const Register = () => {
         }
 
         // Success - user is registered and cookie is set
+        setUser(data);
         navigate('/'); // Redirect to Home Feed
       } catch (err) {
         setServerError(err.message);

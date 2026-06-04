@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Feather } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { useAuthStore } from '../../store/authStore';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -10,6 +11,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
+  const setUser = useAuthStore(state => state.setUser);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,11 +37,12 @@ const Login = () => {
       setServerError('');
       
       try {
-        const response = await fetch('http://localhost:5000/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify(formData),
         });
 
@@ -50,6 +53,7 @@ const Login = () => {
         }
 
         // Success - user is logged in
+        setUser(data);
         navigate('/'); // Redirect to Home Feed
       } catch (err) {
         setServerError(err.message);
